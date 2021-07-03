@@ -122,7 +122,7 @@ class Tritech_Agric_Addons_Public {
 
 		if(has_shortcode($post->post_content, "ta_projects")){
 			// $base_dir = 'http://localhost:8080/js';
-			$base_dir = plugin_dir_url( __FILE__ ) . 'spa/dist/js';
+			$base_dir = plugin_dir_url( __FILE__ ) . 'dist/js';
 			// enqueue the Vue app script with localized data.
 			wp_enqueue_script(
 				$this->plugin_name.'_list-project',

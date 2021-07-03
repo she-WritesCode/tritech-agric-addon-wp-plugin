@@ -1,4 +1,4 @@
-=== Plugin Name ===
+=== Addons for Tritech agric ===
 Contributors: (this should be a list of wordpress.org userid's)
 Donate link: https://she-writescode.github.io
 Tags: comments, spam
