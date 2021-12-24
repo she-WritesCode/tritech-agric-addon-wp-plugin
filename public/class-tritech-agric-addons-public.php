@@ -20,7 +20,8 @@
  * @subpackage Tritech_Agric_Addons/public
  * @author     Busola Okeowo <busolaokemoney@gmail.com>
  */
-class Tritech_Agric_Addons_Public {
+class Tritech_Agric_Addons_Public
+{
 
 	/**
 	 * The ID of this plugin.
@@ -48,30 +49,46 @@ class Tritech_Agric_Addons_Public {
 	 *
 	 *@since    1.0.0
 	 */
-	public function __construct( string $plugin_name, string $version ) {
+	public function __construct(string $plugin_name, string $version)
+	{
 
 		$this->plugin_name = $plugin_name;
 		$this->version = $version;
-
 	}
 
-	public function add_project_list_shortcode() {
-		add_shortcode( 'ta_projects', [$this, 'renderProjectListShortcode'] );
+	public function add_shortcodes()
+	{
+		$this->add_project_list_shortcode();
+		$this->add_project_details_shortcode();
 	}
 
-	public function renderProjectListShortcode($attributes = [], $content = null, $tag ): string {
+	public function add_project_list_shortcode()
+	{
+		add_shortcode('ta_projects', [$this, 'renderProjectListShortcode']);
+	}
+
+	public function add_project_details_shortcode()
+	{
+		add_shortcode('ta_project_details', [$this, 'renderProjectDetailsShortcode']);
+	}
+
+	public function renderProjectListShortcode($attributes = [], $content = null, $tag): string
+	{
 		// normalize attribute keys, lowercase
-		$attributes = array_change_key_case( (array) $attributes, CASE_LOWER );
+		$attributes = array_change_key_case((array) $attributes, CASE_LOWER);
 		// override default attributes with user attributes
 		$projects_attr = shortcode_atts(
-			[ 'limit' => 20, 'page' => 0, 'style' => 'width: 100%; height: 100%;' ],
+			['limit' => 20, 'page' => 0, 'style' => 'width: 100%; height: 100%;'],
 			$attributes,
 			$tag
 		);
 
-		$iframe_url = 'https://dashboard.agric.tritech.com.ng/list-projects?limit=' . $projects_attr['limit'] . '&page='  . $projects_attr['page'];
 		return '<div id="ta_projects"></div>';
-//		return '<iframe class="ta_projects" src="'.$iframe_url.'" style="'.$projects_attr['style'].'"></iframe>';
+	}
+
+	public function renderProjectDetailsShortcode($attributes = [], $content = null, $tag): string
+	{
+		return '<div id="ta_project_details"></div>';
 	}
 
 	/**
@@ -79,7 +96,8 @@ class Tritech_Agric_Addons_Public {
 	 *
 	 * @since    1.0.0
 	 */
-	public function enqueue_styles() {
+	public function enqueue_styles()
+	{
 
 		/**
 		 * This function is provided for demonstration purposes only.
@@ -93,8 +111,8 @@ class Tritech_Agric_Addons_Public {
 		 * class.
 		 */
 
-		wp_enqueue_style( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'css/tritech-agric-addons-public.css', array(), $this->version, 'all' );
-
+		wp_enqueue_style($this->plugin_name, plugin_dir_url(__FILE__) . 'css/tritech-agric-addons-public.css', array(), $this->version, 'all');
+		wp_enqueue_style($this->plugin_name . '-primeicons', 'https://cdn.jsdelivr.net/npm/primeicons@5.0.0/primeicons.css', array(), $this->version, 'all');
 	}
 
 	/**
@@ -102,7 +120,8 @@ class Tritech_Agric_Addons_Public {
 	 *
 	 * @since    1.0.0
 	 */
-	public function enqueue_scripts() {
+	public function enqueue_scripts()
+	{
 
 		/**
 		 * This function is provided for demonstration purposes only.
@@ -118,27 +137,36 @@ class Tritech_Agric_Addons_Public {
 
 		global $post;
 
-		wp_enqueue_script( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'js/tritech-agric-addons-public.js', array( 'jquery' ), $this->version, false );
+		wp_enqueue_script($this->plugin_name, plugin_dir_url(__FILE__) . 'js/tritech-agric-addons-public.js', array('jquery'), $this->version, false);
 
-		if(has_shortcode($post->post_content, "ta_projects")){
-			// $base_dir = 'http://localhost:8080/js';
-			$base_dir = plugin_dir_url( __FILE__ ) . 'dist/js';
+		if (has_shortcode($post->post_content, "ta_projects") or has_shortcode($post->post_content, "ta_project_details")) {
+			$base_dir = plugin_dir_url(__FILE__) . 'dist/js';
 			// enqueue the Vue app script with localized data.
+			$file = $base_dir . $this->get_hashed_file('app');
 			wp_enqueue_script(
-				$this->plugin_name.'_list-project',
-				$base_dir . '/app.c6d2834c.js', // plugin_dir_url( __FILE__ ) . 'spa/dist/app.js'
-				array(),
-				'1.0.0',
-				true,
+				$this->plugin_name . '_list-project',
+				$file,
+				[],
+				$this->version,
+				true
 			);
+			$file2 = $base_dir . $this->get_hashed_file('chunk-vendors');
 			wp_enqueue_script(
-				$this->plugin_name.'_list-project-2',
-				$base_dir . '/chunk-vendors.8d371d59.js', // plugin_dir_url( __FILE__ ) . 'spa/dist/chunk-vendors.js'
-				array(),
-				'1.0.0',
-				true,
+				$this->plugin_name . '_list-project-2',
+				$file2,
+				[],
+				$this->version,
+				true
 			);
 		}
 	}
 
+	public function get_hashed_file($filename)
+	{
+		$base_dir = dirname(__FILE__) . '/dist/js/';
+		$regex = '/\/[\w-]+\.[\w-]+.*/i';
+		$fileWithHash = glob($base_dir . $filename . '.*.js')[0];
+		preg_match($regex, $fileWithHash, $matches);
+		return $matches[0];
+	}
 }

@@ -27,7 +27,8 @@
  * @subpackage Tritech_Agric_Addons/includes
  * @author     Busola Okeowo <busolaokemoney@gmail.com>
  */
-class Tritech_Agric_Addons {
+class Tritech_Agric_Addons
+{
 
 	/**
 	 * The loader that's responsible for maintaining and registering all hooks that power
@@ -66,8 +67,9 @@ class Tritech_Agric_Addons {
 	 *
 	 * @since    1.0.0
 	 */
-	public function __construct() {
-		if ( defined( 'TRITECH_AGRIC_ADDONS_VERSION' ) ) {
+	public function __construct()
+	{
+		if (defined('TRITECH_AGRIC_ADDONS_VERSION')) {
 			$this->version = TRITECH_AGRIC_ADDONS_VERSION;
 		} else {
 			$this->version = '1.0.0';
@@ -78,7 +80,6 @@ class Tritech_Agric_Addons {
 		$this->set_locale();
 		$this->define_admin_hooks();
 		$this->define_public_hooks();
-
 	}
 
 	/**
@@ -97,33 +98,33 @@ class Tritech_Agric_Addons {
 	 * @since    1.0.0
 	 * @access   private
 	 */
-	private function load_dependencies() {
+	private function load_dependencies()
+	{
 
 		/**
 		 * The class responsible for orchestrating the actions and filters of the
 		 * core plugin.
 		 */
-		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-tritech-agric-addons-loader.php';
+		require_once plugin_dir_path(dirname(__FILE__)) . 'includes/class-tritech-agric-addons-loader.php';
 
 		/**
 		 * The class responsible for defining internationalization functionality
 		 * of the plugin.
 		 */
-		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-tritech-agric-addons-i18n.php';
+		require_once plugin_dir_path(dirname(__FILE__)) . 'includes/class-tritech-agric-addons-i18n.php';
 
 		/**
 		 * The class responsible for defining all actions that occur in the admin area.
 		 */
-		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'admin/class-tritech-agric-addons-admin.php';
+		require_once plugin_dir_path(dirname(__FILE__)) . 'admin/class-tritech-agric-addons-admin.php';
 
 		/**
 		 * The class responsible for defining all actions that occur in the public-facing
 		 * side of the site.
 		 */
-		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'public/class-tritech-agric-addons-public.php';
+		require_once plugin_dir_path(dirname(__FILE__)) . 'public/class-tritech-agric-addons-public.php';
 
 		$this->loader = new Tritech_Agric_Addons_Loader();
-
 	}
 
 	/**
@@ -135,12 +136,12 @@ class Tritech_Agric_Addons {
 	 * @since    1.0.0
 	 * @access   private
 	 */
-	private function set_locale() {
+	private function set_locale()
+	{
 
 		$plugin_i18n = new Tritech_Agric_Addons_i18n();
 
-		$this->loader->add_action( 'plugins_loaded', $plugin_i18n, 'load_plugin_textdomain' );
-
+		$this->loader->add_action('plugins_loaded', $plugin_i18n, 'load_plugin_textdomain');
 	}
 
 	/**
@@ -150,13 +151,13 @@ class Tritech_Agric_Addons {
 	 * @since    1.0.0
 	 * @access   private
 	 */
-	private function define_admin_hooks() {
+	private function define_admin_hooks()
+	{
 
-		$plugin_admin = new Tritech_Agric_Addons_Admin( $this->get_plugin_name(), $this->get_version() );
+		$plugin_admin = new Tritech_Agric_Addons_Admin($this->get_plugin_name(), $this->get_version());
 
-		$this->loader->add_action( 'admin_enqueue_scripts', $plugin_admin, 'enqueue_styles' );
-		$this->loader->add_action( 'admin_enqueue_scripts', $plugin_admin, 'enqueue_scripts' );
-
+		$this->loader->add_action('admin_enqueue_scripts', $plugin_admin, 'enqueue_styles');
+		$this->loader->add_action('admin_enqueue_scripts', $plugin_admin, 'enqueue_scripts');
 	}
 
 	/**
@@ -166,15 +167,15 @@ class Tritech_Agric_Addons {
 	 * @since    1.0.0
 	 * @access   private
 	 */
-	private function define_public_hooks() {
+	private function define_public_hooks()
+	{
 
-		$plugin_public = new Tritech_Agric_Addons_Public( $this->get_plugin_name(), $this->get_version() );
+		$plugin_public = new Tritech_Agric_Addons_Public($this->get_plugin_name(), $this->get_version());
 
-		$this->loader->add_action( 'wp_enqueue_scripts', $plugin_public, 'enqueue_styles' );
-		$this->loader->add_action( 'wp_enqueue_scripts', $plugin_public, 'enqueue_scripts' );
+		$this->loader->add_action('wp_enqueue_scripts', $plugin_public, 'enqueue_styles');
+		$this->loader->add_action('wp_enqueue_scripts', $plugin_public, 'enqueue_scripts');
 
-		$this->loader->add_action( 'init', $plugin_public, 'add_project_list_shortcode' );
-
+		$this->loader->add_action('init', $plugin_public, 'add_shortcodes');
 	}
 
 	/**
@@ -182,7 +183,8 @@ class Tritech_Agric_Addons {
 	 *
 	 * @since    1.0.0
 	 */
-	public function run() {
+	public function run()
+	{
 		$this->loader->run();
 	}
 
@@ -193,7 +195,8 @@ class Tritech_Agric_Addons {
 	 * @since     1.0.0
 	 * @return    string    The name of the plugin.
 	 */
-	public function get_plugin_name() {
+	public function get_plugin_name()
+	{
 		return $this->plugin_name;
 	}
 
@@ -203,7 +206,8 @@ class Tritech_Agric_Addons {
 	 * @since     1.0.0
 	 * @return    Tritech_Agric_Addons_Loader    Orchestrates the hooks of the plugin.
 	 */
-	public function get_loader() {
+	public function get_loader()
+	{
 		return $this->loader;
 	}
 
@@ -213,8 +217,8 @@ class Tritech_Agric_Addons {
 	 * @since     1.0.0
 	 * @return    string    The version number of the plugin.
 	 */
-	public function get_version() {
+	public function get_version()
+	{
 		return $this->version;
 	}
-
 }
