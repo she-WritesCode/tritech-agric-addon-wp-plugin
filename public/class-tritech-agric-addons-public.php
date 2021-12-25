@@ -111,8 +111,14 @@ class Tritech_Agric_Addons_Public
 		 * class.
 		 */
 
-		wp_enqueue_style($this->plugin_name, plugin_dir_url(__FILE__) . 'css/tritech-agric-addons-public.css', array(), $this->version, 'all');
-		wp_enqueue_style($this->plugin_name . '-primeicons', 'https://cdn.jsdelivr.net/npm/primeicons@5.0.0/primeicons.css', array(), $this->version, 'all');
+		wp_enqueue_style($this->plugin_name, plugin_dir_url(__FILE__) . 'css/tritech-agric-addons-public.css', [], $this->version, 'all');
+
+		$base_dir = plugin_dir_url(__FILE__) . 'dist/css';
+		$file = $base_dir . $this->get_hashed_file('chunk-vendors', 'css');
+		wp_enqueue_style($this->plugin_name . 'vue_chunk-vendors', $file, [], $this->version, 'all');
+
+		$file = $base_dir . $this->get_hashed_file('app', 'css');
+		wp_enqueue_style($this->plugin_name . 'vue_app', $file, [$this->plugin_name . 'vue_chunk-vendors'], $this->version, 'all');
 	}
 
 	/**
@@ -137,7 +143,7 @@ class Tritech_Agric_Addons_Public
 
 		global $post;
 
-		wp_enqueue_script($this->plugin_name, plugin_dir_url(__FILE__) . 'js/tritech-agric-addons-public.js', array('jquery'), $this->version, false);
+		wp_enqueue_script($this->plugin_name, plugin_dir_url(__FILE__) . 'js/tritech-agric-addons-public.js', ['jquery'], $this->version, false);
 
 		if (has_shortcode($post->post_content, "ta_projects") or has_shortcode($post->post_content, "ta_project_details")) {
 			$base_dir = plugin_dir_url(__FILE__) . 'dist/js';
@@ -161,11 +167,11 @@ class Tritech_Agric_Addons_Public
 		}
 	}
 
-	public function get_hashed_file($filename)
+	public function get_hashed_file($filename, $extension = 'js')
 	{
-		$base_dir = dirname(__FILE__) . '/dist/js/';
+		$base_dir = dirname(__FILE__) . '/dist/' . $extension . '/';
 		$regex = '/\/[\w-]+\.[\w-]+.*/i';
-		$fileWithHash = glob($base_dir . $filename . '.*.js')[0];
+		$fileWithHash = glob($base_dir . $filename . '.*.' . $extension)[0];
 		preg_match($regex, $fileWithHash, $matches);
 		return $matches[0];
 	}
