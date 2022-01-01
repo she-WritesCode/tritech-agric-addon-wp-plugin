@@ -99,18 +99,6 @@ class Tritech_Agric_Addons_Public
 	public function enqueue_styles()
 	{
 
-		/**
-		 * This function is provided for demonstration purposes only.
-		 *
-		 * An instance of this class should be passed to the run() function
-		 * defined in Tritech_Agric_Addons_Loader as all of the hooks are defined
-		 * in that particular class.
-		 *
-		 * The Tritech_Agric_Addons_Loader will then create the relationship
-		 * between the defined hooks and the functions defined in this
-		 * class.
-		 */
-
 		wp_enqueue_style($this->plugin_name, plugin_dir_url(__FILE__) . 'css/tritech-agric-addons-public.css', [], $this->version, 'all');
 
 		$base_dir = plugin_dir_url(__FILE__) . 'dist/css';
@@ -128,18 +116,6 @@ class Tritech_Agric_Addons_Public
 	 */
 	public function enqueue_scripts()
 	{
-
-		/**
-		 * This function is provided for demonstration purposes only.
-		 *
-		 * An instance of this class should be passed to the run() function
-		 * defined in Tritech_Agric_Addons_Loader as all of the hooks are defined
-		 * in that particular class.
-		 *
-		 * The Tritech_Agric_Addons_Loader will then create the relationship
-		 * between the defined hooks and the functions defined in this
-		 * class.
-		 */
 
 		global $post;
 

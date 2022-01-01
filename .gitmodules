@@ -1,3 +1,6 @@
 [submodule "public/spa"]
 	path = public/spa
 	url = https://github.com/she-WritesCode/tritechagric-addon-plugin-vueapp.git
+[submodule "admin/spa"]
+	path = admin/spa
+	url = https://github.com/she-WritesCode/tritechagric-admin.git
