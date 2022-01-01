@@ -94,11 +94,9 @@ class Tritech_Agric_Addons_Admin
 		wp_enqueue_style($this->plugin_name, plugin_dir_url(__FILE__) . 'css/tritech-agric-addons-admin.css', array(), $this->version, 'all');
 
 		$base_dir = plugin_dir_url(__FILE__) . 'dist/assets';
-		// $file = $base_dir . $this->get_hashed_file('vendor', 'css');
-		// wp_enqueue_style($this->plugin_name . 'admin_vendors', $file, [], $this->version, 'all');
 
 		$file = $base_dir . $this->get_hashed_file('style', 'css');
-		wp_enqueue_style($this->plugin_name . 'admin_app', $file, [$this->plugin_name . 'vue_css'], $this->version, 'all');
+		wp_enqueue_style($this->plugin_name . '_admin_app', $file, [], $this->version, 'all');
 	}
 
 	/**
@@ -115,7 +113,7 @@ class Tritech_Agric_Addons_Admin
 			array_push($this->scriptHandles, $this->plugin_name . '_' . $file);
 			wp_enqueue_script(
 				$this->plugin_name . '_'  . $file,
-				plugin_dir_url(__FILE__) . 'dist/assets/' . $filename,
+				plugin_dir_url(__FILE__) . 'dist/assets' . $filename,
 				[],
 				$this->version,
 				false
