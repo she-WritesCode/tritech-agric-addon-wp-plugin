@@ -41,6 +41,8 @@ class Tritech_Agric_Addons_Admin
 	 */
 	private $version;
 
+	private $scriptHandles = [];
+
 	/**
 	 * Initialize the class and set its properties.
 	 *
@@ -95,7 +97,7 @@ class Tritech_Agric_Addons_Admin
 		// $file = $base_dir . $this->get_hashed_file('vendor', 'css');
 		// wp_enqueue_style($this->plugin_name . 'admin_vendors', $file, [], $this->version, 'all');
 
-		$file = $base_dir . $this->get_hashed_file('index', 'css');
+		$file = $base_dir . $this->get_hashed_file('style', 'css');
 		wp_enqueue_style($this->plugin_name . 'admin_app', $file, [$this->plugin_name . 'vue_css'], $this->version, 'all');
 	}
 
@@ -107,38 +109,33 @@ class Tritech_Agric_Addons_Admin
 	public function enqueue_scripts()
 	{
 		wp_enqueue_script($this->plugin_name, plugin_dir_url(__FILE__) . 'js/tritech-agric-addons-admin.js', array('jquery'), $this->version, false);
-
-		$base_dir = plugin_dir_url(__FILE__) . 'dist/assets';
-		// enqueue the Vue app script with localized data.
-		$file = $base_dir . $this->get_hashed_file('index');
-		$file_name = $this->plugin_name . '_admin';
-		wp_enqueue_script(
-			$file_name,
-			$file,
-			[],
-			$this->version,
-			true
-		);
-		$file2 = $base_dir . $this->get_hashed_file('vendor');
-		$file2_name = $this->plugin_name . '_admin-2';
-		wp_enqueue_script(
-			$file2_name,
-			$file2,
-			[],
-			$this->version,
-			true
-		);
+		$vueFileNames = ['index', 'vendor'];
+		foreach ($vueFileNames as $file) {
+			$filename = $this->get_hashed_file($file);
+			array_push($this->scriptHandles, $this->plugin_name . '_' . $file);
+			wp_enqueue_script(
+				$this->plugin_name . '_'  . $file,
+				plugin_dir_url(__FILE__) . 'dist/assets/' . $filename,
+				[],
+				$this->version,
+				false
+			);
+		}
 		add_filter('script_loader_tag', [$this, 'add_type_attribute'], 10, 3);
 	}
 
 	public function add_type_attribute($tag, $handle, $src)
 	{
 		// if not your script, do nothing and return original $tag
-		if (!in_array($handle, ['tritech-agric-addons_admin', 'tritech-agric-addons_admin-2'])) {
+		if (!in_array($handle, $this->scriptHandles)) {
 			return $tag;
 		}
 		// change the script tag by adding type="module" and return it.
-		$tag = '<script id="' . $handle . '-js" type="module" src="' . esc_url($src) . '"></script>';
+		if (strpos($handle, 'index') !== false) {
+			$tag = '<script type="module" crossorigin src="' . esc_url($src) . '" id="' . $handle . '-js"></script>';
+			return $tag;
+		}
+		$tag = '<link rel="modulepreload" href="' . esc_url($src) . '" id="' . $handle . '-js"/>';
 		return $tag;
 	}
 
