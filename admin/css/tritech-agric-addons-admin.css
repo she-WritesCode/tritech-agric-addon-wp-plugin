@@ -2,3 +2,7 @@
  * All of the CSS for your admin-specific functionality should be
  * included in this file.
  */
+
+.p-sidebar-left {
+	margin-top: 2.875rem !important;
+}

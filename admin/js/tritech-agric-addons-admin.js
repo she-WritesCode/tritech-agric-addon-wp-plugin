@@ -1,5 +1,5 @@
-(function( $ ) {
-	'use strict';
+(function ($) {
+	("use strict");
 
 	/**
 	 * All of the code for your admin-facing JavaScript source
@@ -29,4 +29,10 @@
 	 * practising this, we should strive to set a better example in our own work.
 	 */
 
-})( jQuery );
+	// Native method
+	const links = document.getElementsByTagName("link");
+	const link = Array.prototype.filter.call(links, function (item) {
+		return item.rel === "https://api.w.org/";
+	});
+	const api_root = link[0].href;
+})(jQuery);

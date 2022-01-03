@@ -81,7 +81,7 @@ class Tritech_Agric_Addons_Admin
 
 	public function menu_page_template()
 	{
-		echo '<div id="app"></div>';
+		echo '<div class="wrap"><div id="app"></div><div class="clear"></div></div>';
 	}
 
 	/**
