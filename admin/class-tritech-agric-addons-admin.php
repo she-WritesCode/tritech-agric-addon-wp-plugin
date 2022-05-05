@@ -63,10 +63,11 @@ class Tritech_Agric_Addons_Admin
 
 		$capability = 'manage_options';
 		$slug = 'tritech-agric-addons';
+		$textdomain = 'tritechagricaddons';
 
 		add_menu_page(
-			__('Dashboard | Tritech Agric Addons', 'textdomain'),
-			__('Tritech Agric Addons', 'textdomain'),
+			__('Dashboard > Tritech Agric Addons', $textdomain),
+			__('Tritech Agric Addons', $textdomain),
 			$capability,
 			$slug,
 			[$this, 'menu_page_template'],
@@ -74,8 +75,12 @@ class Tritech_Agric_Addons_Admin
 		);
 
 		if (current_user_can($capability)) {
-			$submenu[$slug][] = [__('Dashboard', 'textdomain'), $capability, 'admin.php?page=' . $slug . '#/'];
-			$submenu[$slug][] = [__('Projects', 'textdomain'), $capability, 'admin.php?page=' . $slug . '#/projects'];
+			$submenu[$slug][] = [__('Dashboard', $textdomain), $capability, 'admin.php?page=' . $slug . '#/'];
+			$submenu[$slug][] = [__('Projects', $textdomain), $capability, 'admin.php?page=' . $slug . '#/projects'];
+			$submenu[$slug][] = [__('Project categories', $textdomain), $capability, 'admin.php?page=' . $slug . '#/project-categories'];
+			$submenu[$slug][] = [__('Project updates', $textdomain), $capability, 'admin.php?page=' . $slug . '#/project-updates'];
+			$submenu[$slug][] = [__('Investments', $textdomain), $capability, 'admin.php?page=' . $slug . '#/investments'];
+			$submenu[$slug][] = [__('Users', $textdomain), $capability, 'admin.php?page=' . $slug . '#/users'];
 		}
 	}
 
